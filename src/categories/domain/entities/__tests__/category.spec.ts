@@ -1,5 +1,6 @@
-import Category from "../category"
+import Category, { CategoryProps } from "../category"
 import { omit } from 'lodash';
+import { validate as uuidValidate } from 'uuid';
 
 describe("Testing unit category class", () => {
      
@@ -64,6 +65,23 @@ describe("Testing unit category class", () => {
         // expect(movie.props.description).toBe("some_description");
         // expect(movie.props.isActive).toBeTruthy();
         // expect(movie.props.createdAt).toEqual(createdAt);
+    });
+
+    it("should test uuid", () => {
+        type CategoryData = { props: CategoryProps; id?: string; };
+
+        const data: CategoryData[] = [
+            { props: { name: "some_name" }},
+            { props: { name: "some_name" }, id: null },
+            { props: { name: "some_name" }, id: undefined },
+            { props: { name: "some_name" }, id: "34404b03-fdf0-45c9-b3e4-72b3f41c64c4" },
+        ]
+
+        data.forEach(prop => {
+            let category = new Category(prop.props, prop.id);
+            expect(category.id).not.toBeNull();
+            expect(uuidValidate(category.id)).toBeTruthy();
+        })
     })
 
     it("should getter of name field", () => {
