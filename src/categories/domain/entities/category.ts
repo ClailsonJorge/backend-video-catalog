@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { UniqueEntityId } from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 
 export interface CategoryProps {
     name: string;
@@ -7,16 +7,27 @@ export interface CategoryProps {
     created_at?: Date;
 }
 
-export default class Category {
-    public readonly id: string;
+/**
+ * This class represent the category class.
+ * it will be use to rank the movies.
+ * @class
+ */
 
-    constructor(public readonly props: CategoryProps, id?: string) {
-        this.id = id || uuidv4();
+export default class Category {
+    public readonly id: UniqueEntityId;
+
+    constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
+        this.id = id || new UniqueEntityId();
         this.description = this.props.description ?? null;
         this.isActive = this.isActive ?? true;
         this.props.created_at = this.props.created_at ?? new Date();
     }
 
+    /**
+     * This method return the name of object
+     * @return {string} - The string has the name of object.
+     */
+    
     get name() {
         return this.props.name;
     }
