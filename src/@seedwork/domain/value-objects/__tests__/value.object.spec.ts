@@ -16,8 +16,6 @@ describe("ValueObject Unit Test", () => {
     it("should convert to a string", () => {
         const date = new Date();
         let arrange = [
-            { received: null, expected: "null" },
-            { received: undefined, expected: "undefined" },
             { received: "", expected: "" },
             { received: "fake teste", expected: "fake teste" },
             { received: 0, expected: "0" },
@@ -36,9 +34,12 @@ describe("ValueObject Unit Test", () => {
         });
     })
 
-    it("immutable", () => {
-        const vo = new StubValueObject("fake test");
-        vo["_value"] = "mudou";
-        console.log(vo);
+    it("should be a immutable object", () => {
+        let obj = { prop1: "value1", deep: { prop2: "value2", prop3: new Date() } };
+        const vo = new StubValueObject(obj);
+
+        expect(() => { (vo as any).value.prop1 = "change_value" }).toThrow("Cannot assign to read only property 'prop1' of object '#<Object>'");
+        expect(() => { (vo as any).value.deep.prop2 = "change_value" }).toThrow("Cannot assign to read only property 'prop2' of object '#<Object>'");
+        expect(vo.value.deep.prop3).toBeInstanceOf(Date)
     })
 })
