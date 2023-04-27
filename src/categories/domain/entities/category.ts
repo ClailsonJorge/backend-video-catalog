@@ -1,3 +1,4 @@
+import { Entity } from "../../../@seedwork/entity/entity";
 import { UniqueEntityId } from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 
 export interface CategoryProps {
@@ -7,27 +8,33 @@ export interface CategoryProps {
     created_at?: Date;
 }
 
-/**
- * This class represent the category class.
- * it will be use to rank the movies.
- * @class
- */
 
-export default class Category {
-    public readonly id: UniqueEntityId;
+type UpdateProps = { 
+    name?: string;
+    description?: string;
+}
 
+export default class Category extends Entity<CategoryProps> {
     constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
-        this.id = id || new UniqueEntityId();
+        super(props, id)
         this.description = this.props.description ?? null;
         this.isActive = this.isActive ?? true;
         this.props.created_at = this.props.created_at ?? new Date();
     }
 
-    /**
-     * This method return the name of object
-     * @return {string} - The string has the name of object.
-     */
-    
+    update(props: UpdateProps ) {
+        this.description = props?.description || this.description;
+        this.name = props?.name || this.name;
+    }
+
+    active() {
+        this.isActive = true;
+    }
+
+    desactive() {
+        this.isActive = false;
+    }
+
     get name() {
         return this.props.name;
     }
@@ -42,6 +49,10 @@ export default class Category {
 
     get created_at() {
         return this.props.created_at;
+    }
+
+    private set name(value: string) {
+        this.props.name = value ?? null;
     }
 
     private set description(value: string) {
