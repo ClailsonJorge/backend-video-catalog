@@ -10,7 +10,7 @@ export class ValidatorRules {
     required(): this {
         if(this.value === null || this.value === undefined || this.value === "") {
             throw new ValidationError(`The ${this.property} field is required.`);
-        }
+        }                            
         return this;
     }
 
@@ -22,7 +22,7 @@ export class ValidatorRules {
     }
 
     maxLength(length: number): this {
-        if(this.value.length > length){
+        if(this.value?.length > length){
             throw new ValidationError(`The ${this.property} must be less or equal than ${length}`)
         }
         return this;
